@@ -1,9 +1,10 @@
-const jwt = require("jsonwebtoken");
-const Users = require("../models/users");
+const jwt = require('jsonwebtoken');
+const Users = require('../models/users');
 
 module.exports = async (req, res, next) => {
   //클라이언트에서 token을 주는 것이기에 req로 받아와야 한다..
   const token = req.cookies.mytoken;
+  console.log(`token = ${token}`);
 
   try {
     // 로그인한 유저면 토큰 복호화후 ID를 가져오고 해당 ID가 존재하면 저장
@@ -13,11 +14,16 @@ module.exports = async (req, res, next) => {
       const { userID } = jwt.verify(token, process.env.SECRET_KEY);
       const userFind = await Users.findOne({ userID: userID });
       res.locals.user = userFind.userID;
+      next();
+    } else {
+      //토큰이 없는 경우 튕겨나가게 하기 위해
+      console.log(
+        `method: ${req.method}, url: ${req.originalUrl}, 인증받지 않는 사용자`
+      );
+      res.send({ msg: 'fail' });
     }
   } catch (err) {
-    console.log("실패");
-    res.status(401).send({ msg: "로그인 후 사용하세요." });
+    res.status(401).send({ msg: '토큰없음, 로그인 오류입니다.' });
     return;
   }
-  next();
 };

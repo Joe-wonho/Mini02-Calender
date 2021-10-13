@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 4000;
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const cors = require('cors');
@@ -14,7 +14,12 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser(process.env.SECRET_KEY));
-app.use(cors({}));
+app.use(
+  cors({
+    origin: true,
+    credentials: true, // 크로스 도메인 허용
+  })
+);
 
 // Router
 const loginUpPageRouter = require('./routers/login');
@@ -28,9 +33,9 @@ app.use('/diary', diaryRouter);
 
 //Render
 
-//캘린더 메인
-// app.get("/home", (req, res) => {
-//   res.render("index");
+// 캘린더 메인
+// app.get('/home', (req, res) => {
+//   res.render('index');
 // });
 
 // //로그인 페이지
@@ -44,7 +49,7 @@ app.use('/diary', diaryRouter);
 // });
 
 app.listen(port, () => {
-  console.log(`listening at http://localhost:3000`);
+  console.log(`listening at http://localhost:4000`);
 });
 
 module.exports = app;

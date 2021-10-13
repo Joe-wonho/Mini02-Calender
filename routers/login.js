@@ -1,11 +1,12 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const Users = require("../models/users");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const Users = require('../models/users');
+const authUser = require('../middlewares/auth-middleware');
 
-//로그인 API
-router.post("/", async (req, res) => {
+//로그인 postAPI
+router.post('/', async (req, res) => {
   const { userID, PW } = req.body;
 
   const existUsers = await Users.findOne({ userID });
@@ -17,20 +18,25 @@ router.post("/", async (req, res) => {
     const token = jwt.sign(
       { userID: existUsers.userID },
       process.env.SECRET_KEY,
-      { expiresIn: "3d" }
+      { expiresIn: '3d' }
     );
     // console.log("발급된 토큰 이름:", token);
-    res.cookie("mytoken", token, {
+    res.cookie('mytoken', token, {
       maxAge: 86400 * 3000,
-      httpOnly: true,
-      sameSite: "None",
+      httpOnly: true, //XSS 방어를 위해 사용 아래도
+      sameSite: 'None',
     });
-    res.send({ msg: "success" });
+    res.send({ msg: 'success' });
   } else {
     res
       .status(400)
-      .send({ errorMessage: "아이디 또는 패스워드가 잘못됐습니다." });
+      .send({ errorMessage: '아이디 또는 패스워드가 잘못됐습니다.' });
   }
+});
+
+//로그인 getAPI
+router.get('/', authUser, async (req, res) => {
+  res.send({ msg: 'success' });
 });
 
 module.exports = router;
