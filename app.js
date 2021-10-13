@@ -33,21 +33,6 @@ app.use('/diary', diaryRouter);
 
 //Render
 
-// 캘린더 메인
-// app.get('/home', (req, res) => {
-//   res.render('index');
-// });
-
-// //로그인 페이지
-// app.get('/login', (req, res) => {
-//   res.render('login');
-// });
-
-// //회원가입페이지
-// app.get('/signup', (req, res) => {
-//   res.render('signup');
-// });
-
 app.listen(port, () => {
   console.log(`listening at http://localhost:4000`);
 });
