@@ -6,16 +6,15 @@ const Joi = require('joi');
 
 //회원가입 등록
 router.post('/', async (req, res) => {
-  const postUserSchema = Joi.object({
-    userID: Joi.string().min(4).alphanum().required(),
-    PW: Joi.string()
-      .min(4)
-      .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
-      .required(),
-    confirmPW: Joi.ref('PW'),
-  });
-
   try {
+    const postUserSchema = Joi.object({
+      userID: Joi.string().min(4).alphanum().required(),
+      PW: Joi.string()
+        .min(4)
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+        .required(),
+      confirmPW: Joi.ref('PW'),
+    });
     const { userID, PW, confirmPW } = await postUserSchema.validateAsync(
       req.body
     );

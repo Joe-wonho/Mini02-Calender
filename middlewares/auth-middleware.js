@@ -3,7 +3,8 @@ const Users = require('../models/users');
 
 module.exports = async (req, res, next) => {
   //클라이언트에서 token을 주는 것이기에 req로 받아와야 한다..
-  const token = req.cookies.mytoken;
+  // const token = req.cookies.mytoken; //쿠키파서 쓴경우 사용가능
+  const token = req.headers.authorization.split(' ')[1];
   console.log(`mytoken = ${token}`);
 
   try {
@@ -20,6 +21,7 @@ module.exports = async (req, res, next) => {
         `method: ${req.method}, url: ${req.originalUrl}, 인증받지 않은 사용자입니다`
       );
       res.send({ msg: 'fail' });
+      return;
     }
   } catch (err) {
     res.status(401).send({ msg: '토큰없음, 로그인 오류입니다.' });

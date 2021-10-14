@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const port = 4000;
-const cookieParser = require('cookie-parser');
+//쿠키파서 사용하지 않고 토큰 받기
+// const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const cors = require('cors');
 // MongoDB Router
@@ -13,7 +14,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cookieParser(process.env.SECRET_KEY));
+// app.use(cookieParser(process.env.SECRET_KEY)); //쿠키파서 사용할 경우 쓴다.
 app.use(
   cors({
     origin: true,
@@ -30,8 +31,6 @@ const mainPageRouter = require('./routers');
 app.use('/', mainPageRouter);
 const diaryRouter = require('./routers/diary');
 app.use('/diary', diaryRouter);
-
-//Render
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:4000`);
