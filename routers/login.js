@@ -3,7 +3,6 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Users = require('../models/users');
-// const authUser = require('../middlewares/auth-middleware');
 
 //로그인 postAPI
 router.post('/', async (req, res) => {

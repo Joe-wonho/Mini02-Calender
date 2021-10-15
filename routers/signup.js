@@ -61,7 +61,7 @@ router.post('/checkup', async (req, res) => {
     if (existUsers) {
       res.status(200).send({ msg: '이미 존재하는 아이디입니다.' });
     } else {
-      res.send({ msg: '사용할 수 있는 아이디입니다.' });
+      res.send({ msg: '사용 가능한 아이디입니다' });
     }
   } catch (err) {
     console.log(

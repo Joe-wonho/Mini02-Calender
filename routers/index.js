@@ -1,5 +1,4 @@
 const express = require('express');
-const Joi = require('joi');
 const router = express.Router();
 const authUser = require('../middlewares/auth-middleware');
 const Diaries = require('../models/diaries');
@@ -18,7 +17,7 @@ router.get('/', authUser, async (req, res) => {
           $lte: date + '-31',
         },
       });
-      // console.log(diaryDate);
+      // console.log(diaryDate); 200번으로 성공요청
       res.json(diaryDate);
     } catch (err) {
       console.error(err); // 해당월에 diary가 잘 들어갔는지 확인
