@@ -1,39 +1,30 @@
 const express = require('express');
 const app = express();
 const port = 4000;
-//쿠키파서 사용하지 않고 토큰 받기
-// const cookieParser = require('cookie-parser');
-require('dotenv').config();
-const cors = require('cors');
-// MongoDB Router
+const loginUpPageRouter = require('./routers/login');
+const signUpPageRouter = require('./routers/signup');
+const mainPageRouter = require('./routers/index');
+const diaryRouter = require('./routers/diary');
+const cors = require('cors'); //추가공부
 const connect = require('./models');
 connect();
+require('dotenv').config(); //환경변수를 위해 사용
 
-// Middleware
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+// middleware
+app.use(cors({ credentials: true, origin: true }));
+// express 사용을 위한 설정 middle ware 설정
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-// app.use(cookieParser(process.env.SECRET_KEY)); //쿠키파서 사용할 경우 쓴다.
-app.use(
-  cors({
-    origin: true,
-    credentials: true, // 크로스 도메인 허용
-  })
-);
-
-// Router
-const loginUpPageRouter = require('./routers/login');
-app.use('/login', loginUpPageRouter);
-const signUpPageRouter = require('./routers/signup');
-app.use('/signup', signUpPageRouter);
-const mainPageRouter = require('./routers');
+// 라우터를 위한 middle ware 설정
 app.use('/', mainPageRouter);
-const diaryRouter = require('./routers/diary');
+app.use('/login', loginUpPageRouter);
+app.use('/signup', signUpPageRouter);
 app.use('/diary', diaryRouter);
 
-app.listen(port, () => {
-  console.log(`listening at http://localhost:4000`);
-});
+//errorHandler 추가하기
+
+//쿠키파서 사용하지 않고 토큰 받기 만약 쿠키파서 적용시 코드
+// const cookieParser = require('cookie-parser');
+// app.use(cookieParser(process.env.SECRET_KEY)); //쿠키파서 사용할 경우 쓴다.
 
 module.exports = app;
